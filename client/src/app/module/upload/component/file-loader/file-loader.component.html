@@ -1,0 +1,29 @@
+<div class="card text-white bg-dark m-4" style="min-width: 32rem; max-width: 48rem;">
+  <div class="card-body text-center">
+    <form [formGroup]="uploadForm">
+      <div class="form-group m-0 p-3">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input m-0" id="customFile" formControlName="patch" (change)="fileChangeEvent($event.target.files)">
+          <label class="custom-file-label" for="customFile">Select .thrl6p File</label>
+        </div>
+        <div *ngIf="patch.invalid && (patch.dirty)" class="alert alert-danger mt-1 p-1">
+          <div *ngIf="patch.errors.required">
+            File is required.
+          </div>
+          <div *ngIf="patch.errors.requiredFileType">
+            File type was wrong. Expected a thrl6p file.
+          </div>
+          <div *ngIf="patch.errors.fileTooBig">
+            File was too big. Patches shouldn't be bigger than 1KB.
+          </div>
+          <div *ngIf="patch.errors.fileTooSmall">
+            File was empty.
+          </div>
+          <div *ngIf="patch.errors.wrongFileCount">
+            Expected exactly 1 file to be selected.
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
