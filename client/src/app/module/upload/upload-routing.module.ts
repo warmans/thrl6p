@@ -4,8 +4,8 @@ import { UploadComponent } from './page/upload/upload.component';
 import { ViewComponent } from './page/view/view.component';
 
 const routes: Routes = [
-  { path: '', component: UploadComponent },
-  { path: 'view/:id', component: ViewComponent }
+  { path: 'upload', component: UploadComponent},
+  { path: ':id', component: ViewComponent }
 ];
 
 @NgModule({

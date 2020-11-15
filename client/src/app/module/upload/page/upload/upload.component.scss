@@ -1,24 +1,2 @@
-.container {
-  max-width: 960px;
-}
+@import "src/scss/variables";
 
-.card-body {
-  background-color: darken(#343A40, 5%);
-}
-
-.text-pre {
-  white-space: pre;
-}
-
-.table {
-  background-color: transparent;
-}
-
-.card-header-pills {
-  font-size: 80%;
-
-  .nav-link {
-    color: #f2f2f2;
-    cursor: pointer;
-  }
-}

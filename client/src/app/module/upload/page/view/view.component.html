@@ -1,1 +1,35 @@
-<p>view works!</p>
+<div class="container pt-3">
+  <div class="row mb-3">
+    <div class="col">
+      <span class="patch-title">{{ patch?.name }}</span>
+      <button type="button" class="btn btn-primary float-right">Download</button>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card text-white bg-dark w-100">
+        <div class="card-header">
+          <strong>Details</strong>
+        </div>
+        <div class="card-body">
+          <p>
+            {{ patch?.description || "No Description..."}}
+          </p>
+          <div class="mb-3">
+            This Page:
+            <div class="w-100 mt-1 p-1 inset-block">URL</div>
+          </div>
+          <div>
+            Direct Patch Download:
+            <div class="w-100 mt-1 p-1 inset-block">URL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-5">
+    <div class="col">
+      <app-patch-viewer *ngIf="patch" [raw]="patch.patch" [patch]="parsed"></app-patch-viewer>
+    </div>
+  </div>
+</div>

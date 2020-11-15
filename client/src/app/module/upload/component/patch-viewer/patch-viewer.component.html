@@ -1,0 +1,455 @@
+<div class="card text-white bg-dark w-100">
+  <div class="card-header">
+    <strong>Tone</strong>
+    <div class="float-right">
+      <button
+              type="button"
+              class="btn btn-sm p-1"
+              [ngClass]="{'btn-primary': showRaw, 'btn-secondary': !showRaw}"
+              (click)="showRaw = !showRaw">Raw
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <ng-container *ngIf="showRaw">
+      <div class="text-monospace text-pre">
+        {{ raw }}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!showRaw">
+      <div clas="row mb-3">
+        <div class="card-subheader py-2 mb-2">
+          Amp
+          <span class="badge badge-secondary float-right">
+            {{ patch.data.tone.THRGroupAmp['@asset'] }} (Cabinet: {{ patch .data .tone .THRGroupCab.SpkSimType }})
+          </span>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col">
+          <mwl-gauge
+                  [max]="10"
+                  [dialStartAngle]="-90"
+                  [dialEndAngle]="-90.001"
+                  [value]="patch?.data?.tone?.THRGroupAmp?.Drive * 10"
+                  [animated]="true"
+                  [animationDuration]="1"
+          >
+          </mwl-gauge>
+          <div class="w-100 text-center font-weight-bold">
+            Drive
+          </div>
+        </div>
+        <div class="col">
+          <mwl-gauge
+                  [max]="10"
+                  [dialStartAngle]="-90"
+                  [dialEndAngle]="-90.001"
+                  [value]="patch?.data?.tone?.THRGroupAmp?.Master * 10"
+                  [animated]="true"
+                  [animationDuration]="1"
+          >
+          </mwl-gauge>
+          <div class="w-100 text-center font-weight-bold">
+            Master
+          </div>
+        </div>
+        <div class="col">
+          <mwl-gauge
+                  [max]="10"
+                  [dialStartAngle]="-90"
+                  [dialEndAngle]="-90.001"
+                  [value]="patch?.data?.tone?.THRGroupAmp.Bass * 10"
+                  [animated]="true"
+                  [animationDuration]="1"
+          >
+          </mwl-gauge>
+          <div class="w-100 text-center font-weight-bold">
+            Bass
+          </div>
+        </div>
+        <div class="col">
+          <mwl-gauge
+                  [max]="10"
+                  [dialStartAngle]="-90"
+                  [dialEndAngle]="-90.001"
+                  [value]="patch?.data?.tone?.THRGroupAmp?.Mid * 10"
+                  [animated]="true"
+                  [animationDuration]="1"
+          >
+          </mwl-gauge>
+          <div class="w-100 text-center font-weight-bold">
+            Mid
+          </div>
+        </div>
+        <div class="col">
+          <mwl-gauge
+                  [max]="10"
+                  [dialStartAngle]="-90"
+                  [dialEndAngle]="-90.001"
+                  [value]="patch?.data?.tone?.THRGroupAmp?.Treble * 10"
+                  [animated]="true"
+                  [animationDuration]="1"
+          >
+          </mwl-gauge>
+          <div class="w-100 text-center font-weight-bold">
+            Treble
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="card-subheader py-2 mb-2">
+                Compressor
+                <app-on-indicator class="float-right" [on]="patch?.data?.tone?.THRGroupFX1Compressor['@enabled']"></app-on-indicator>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col" [ngClass]="{'section-disabled': !patch?.data?.tone?.THRGroupFX1Compressor['@enabled']}">
+              <table class="w-100">
+                <tr>
+                  <th style="width: 100px">Asset</th>
+                  <td>
+                    <span class="badge badge-secondary">
+                      {{ patch.data?.tone?.THRGroupFX1Compressor['@asset'] }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Sustain</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX1Compressor?.Sustain * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Sustain * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Level</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX1Compressor?.Level * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Level * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="card-subheader py-2 mb-2">
+                Effect
+                <app-on-indicator class="float-right" [on]="patch?.data?.tone?.THRGroupFX2Effect['@enabled']"></app-on-indicator>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col" [ngClass]="{'section-disabled': !patch?.data?.tone?.THRGroupFX2Effect['@enabled']}">
+              <table class="w-100">
+                <tr>
+                  <th style="width: 100px">
+                    Asset
+                  </th>
+                  <td>
+                    <span class="badge badge-secondary">
+                      {{ patch?.data?.tone?.THRGroupFX2Effect['@asset'] }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Wet/Dry</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX2Effect['@wetDry'] * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX2Effect['@wetDry'] | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Depth</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Depth * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Depth * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Feedback</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Feedback * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Feedback * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Freq.</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Freq * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Freq * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Pre</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Pre * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Pre * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="card-subheader py-2 mb-2">
+                Echo
+                <app-on-indicator class="float-right" [on]="patch?.data?.tone?.THRGroupFX3EffectEcho['@enabled']"></app-on-indicator>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col" [ngClass]="{'section-disabled': !patch?.data?.tone?.THRGroupFX3EffectEcho['@enabled']}">
+              <table class="w-100">
+                <tr>
+                  <th style="width: 100px">Asset</th>
+                  <td>
+                    <span class="badge badge-secondary">
+                      {{ patch?.data?.tone?.THRGroupFX3EffectEcho['@asset'] }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Wet/Dry</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX3EffectEcho['@wetDry'] * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX3EffectEcho['@wetDry'] * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Bass</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Bass * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Bass * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Feedback</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Feedback * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Feedback * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Time</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Time * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Time * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Treble</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Treble * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX3EffectEcho?.Treble * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="card-subheader py-2 mb-2">
+                Reverb
+                <app-on-indicator class="float-right" [on]="patch?.data?.tone?.THRGroupFX4EffectReverb['@enabled']"></app-on-indicator>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col" [ngClass]="{'section-disabled': !patch?.data?.tone?.THRGroupFX4EffectReverb['@enabled']}">
+              <table class="w-100">
+                <tr>
+                  <th style="width: 100px">Asset</th>
+                  <td>
+                    <span class="badge badge-secondary">{{ patch?.data?.tone?.THRGroupFX4EffectReverb['@asset'] }}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Wet/Dry</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX4EffectReverb['@wetDry'] * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX4EffectReverb['@wetDry'] * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th style="width: 100px">Decay</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX4EffectReverb?.Decay * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX4EffectReverb?.Decay * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th style="width: 100px">PreDelay</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX4EffectReverb?.PreDelay * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX4EffectReverb?.PreDelay * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th style="width: 100px">Tone</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupFX4EffectReverb?.Tone * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupFX4EffectReverb?.Tone * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="card-subheader py-2 mb-2">
+                Noise Gate
+                <app-on-indicator class="float-right" [on]="patch?.data?.tone?.THRGroupGate['@enabled']"></app-on-indicator>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col" [ngClass]="{'section-disabled': !patch?.data?.tone?.THRGroupGate['@enabled']}">
+              <table class="w-100">
+                <tr>
+                  <th style="width: 100px">Asset</th>
+                  <td>
+                    <span class="badge badge-secondary float-right">
+                      {{ patch?.data?.tone?.THRGroupGate['@asset'] }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Decay</th>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           style="width: {{ patch?.data?.tone?.THRGroupGate?.Decay * 100 }}%;">
+                        {{ patch?.data?.tone?.THRGroupGate?.Decay * 10 | number }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th style="width: 100px">Threshold</th>
+                  <td>{{ patch?.data?.tone?.THRGroupGate?.Thresh | number }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col">
+              <div class="card-subheader py-2 mb-2">
+                Global
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <table class="w-100">
+                <tr>
+                  <th style="width: 100px">Tempo</th>
+                  <td>{{ patch?.data?.tone?.global?.THRPresetParamTempo }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

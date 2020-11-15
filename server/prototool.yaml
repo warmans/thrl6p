@@ -1,0 +1,42 @@
+excludes:
+  - bin
+  - pkg
+  - gen
+  - cmd
+
+protoc:
+  version: 3.5.1
+  includes:
+    - vendor/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis
+    - vendor/github.com/grpc-ecosystem/grpc-gateway
+  allow_unused_imports: false
+
+lint:
+  rules:
+    remove:
+      - ENUM_FIELD_PREFIXES
+      - ENUM_ZERO_VALUES_INVALID
+      - FILE_OPTIONS_EQUAL_GO_PACKAGE_PB_SUFFIX
+      - FILE_OPTIONS_EQUAL_JAVA_MULTIPLE_FILES_TRUE
+      - FILE_OPTIONS_REQUIRE_JAVA_MULTIPLE_FILES
+      - FILE_OPTIONS_REQUIRE_JAVA_OUTER_CLASSNAME
+      - FILE_OPTIONS_REQUIRE_JAVA_PACKAGE
+      - REQUEST_RESPONSE_TYPES_IN_SAME_FILE
+      - REQUEST_RESPONSE_TYPES_UNIQUE
+
+generate:
+  go_options:
+    import_path: github.com/warmans/thrl6p/server
+  plugins:
+    - name: go
+      type: go
+      flags: plugins=grpc
+      output: gen
+    - name: grpc-gateway
+      type: go
+      flags: logtostderr=true
+      output: gen
+    - name: swagger
+      type: go
+      flags: logtostderr=true
+      output: gen

@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { RootRoutingModule } from './root-routing.module';
 import { RootComponent } from './component/root/root.component';
+import { PatchServiceAPIClientModule } from '../lib/api-client/services/patch-service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -10,7 +12,9 @@ import { RootComponent } from './component/root/root.component';
   ],
   imports: [
     BrowserModule,
-    RootRoutingModule
+    RootRoutingModule,
+    HttpClientModule,
+    PatchServiceAPIClientModule.forRoot()
   ],
   providers: [],
   bootstrap: [RootComponent]

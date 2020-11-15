@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'upload',
-    loadChildren: () => import('../module/upload/upload.module').then(m => m.UploadModule)
+    path: 'patch',
+    loadChildren: () => import('../module/upload/upload.module').then(m => m.UploadModule),
   },
   {
     path: '',
-    redirectTo: 'upload',
+    redirectTo: 'patch/upload',
     pathMatch: 'full'
   }
 ];

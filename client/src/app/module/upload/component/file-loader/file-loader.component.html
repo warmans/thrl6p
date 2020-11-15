@@ -6,7 +6,7 @@
           <input type="file" class="custom-file-input m-0" id="customFile" formControlName="patch" (change)="fileChangeEvent($event.target.files)">
           <label class="custom-file-label" for="customFile">Select .thrl6p File</label>
         </div>
-        <div *ngIf="patch.invalid && (patch.dirty)" class="alert alert-danger mt-1 p-1">
+        <div *ngIf="patch.invalid && (patch.dirty)" class="text-danger mt-1 p-1">
           <div *ngIf="patch.errors.required">
             File is required.
           </div>
