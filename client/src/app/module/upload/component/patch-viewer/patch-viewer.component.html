@@ -6,14 +6,14 @@
               type="button"
               class="btn btn-sm p-1"
               [ngClass]="{'btn-primary': showRaw, 'btn-secondary': !showRaw}"
-              (click)="showRaw = !showRaw">Raw
+              (click)="toggleRaw()">Raw
       </button>
     </div>
   </div>
   <div class="card-body">
     <ng-container *ngIf="showRaw">
       <div class="text-monospace text-pre">
-        {{ raw }}
+        {{ rawPatch() }}
       </div>
     </ng-container>
     <ng-container *ngIf="!showRaw">
@@ -187,7 +187,7 @@
                       <div class="progress-bar"
                            role="progressbar"
                            style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Depth * 100 }}%;">
-                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Depth * 10 | number }}
+                        {{ patch?.data?.tone?.THRGroupFX2Effect?.Depth * 10 | number }}
                       </div>
                     </div>
                   </td>
@@ -199,7 +199,7 @@
                       <div class="progress-bar"
                            role="progressbar"
                            style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Feedback * 100 }}%;">
-                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Feedback * 10 | number }}
+                        {{ patch?.data?.tone?.THRGroupFX2Effect?.Feedback * 10 | number }}
                       </div>
                     </div>
                   </td>
@@ -211,7 +211,7 @@
                       <div class="progress-bar"
                            role="progressbar"
                            style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Freq * 100 }}%;">
-                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Freq * 10 | number }}
+                        {{ patch?.data?.tone?.THRGroupFX2Effect?.Freq * 10 | number }}
                       </div>
                     </div>
                   </td>
@@ -223,7 +223,7 @@
                       <div class="progress-bar"
                            role="progressbar"
                            style="width: {{ patch?.data?.tone?.THRGroupFX2Effect?.Pre * 100 }}%;">
-                        {{ patch?.data?.tone?.THRGroupFX1Compressor?.Pre * 10 | number }}
+                        {{ patch?.data?.tone?.THRGroupFX2Effect?.Pre * 10 | number }}
                       </div>
                     </div>
                   </td>

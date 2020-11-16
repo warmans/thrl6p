@@ -44,6 +44,39 @@
         ]
       }
     },
+    "/api/patch/validate/name": {
+      "post": {
+        "description": "Validate a patch name.",
+        "operationId": "PatchService_ValidateName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/thrl6pValidateNameRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PatchService"
+        ]
+      }
+    },
     "/api/patch/{id}": {
       "get": {
         "description": "Gets a patch with associated metadata.",
@@ -116,13 +149,10 @@
     "thrl6pCreatePatchRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "patch": {
           "type": "string"
         },
         "description": {
-          "type": "string"
-        },
-        "patch": {
           "type": "string"
         }
       }
@@ -133,16 +163,24 @@
         "id": {
           "type": "string"
         },
+        "patch": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "patch": {
-          "type": "string"
-        },
         "permalink": {
+          "type": "string"
+        }
+      }
+    },
+    "thrl6pValidateNameRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
           "type": "string"
         }
       }

@@ -20,8 +20,6 @@ export function isThrl6pCreatePatchRequest(arg: any): arg is models.Thrl6pCreate
   typeof arg === 'object' &&
     // description?: string
     ( typeof arg.description === 'undefined' || typeof arg.description === 'string' ) &&
-    // name?: string
-    ( typeof arg.name === 'undefined' || typeof arg.name === 'string' ) &&
     // patch?: string
     ( typeof arg.patch === 'undefined' || typeof arg.patch === 'string' ) &&
 
@@ -43,6 +41,17 @@ export function isThrl6pPatch(arg: any): arg is models.Thrl6pPatch {
     ( typeof arg.patch === 'undefined' || typeof arg.patch === 'string' ) &&
     // permalink?: string
     ( typeof arg.permalink === 'undefined' || typeof arg.permalink === 'string' ) &&
+
+  true
+  );
+  }
+
+export function isThrl6pValidateNameRequest(arg: any): arg is models.Thrl6pValidateNameRequest {
+  return (
+  arg != null &&
+  typeof arg === 'object' &&
+    // name?: string
+    ( typeof arg.name === 'undefined' || typeof arg.name === 'string' ) &&
 
   true
   );

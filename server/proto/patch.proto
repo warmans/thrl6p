@@ -6,6 +6,7 @@ option go_package = "api/v1";
 
 import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
+import "google/protobuf/empty.proto";
 
 service PatchService {
   rpc CreatePatch (CreatePatchRequest) returns (Patch) {
@@ -18,6 +19,16 @@ service PatchService {
     };
   }
 
+  rpc ValidateName (ValidateNameRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/patch/validate/name",
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Validate a patch name."
+    };
+  }
+
   rpc GetPatch (GetPatchRequest) returns (Patch) {
     option (google.api.http) = {
       get: "/api/patch/{id}"
@@ -26,23 +37,25 @@ service PatchService {
       description: "Gets a patch with associated metadata."
     };
   }
-
 }
 
 message CreatePatchRequest {
-  string name = 1;
+  string patch = 1;
   string description = 2;
-  string patch = 3;
 }
 
 message Patch {
   string id = 1;
-  string name = 2;
-  string description = 3;
-  string patch = 4;
+  string patch = 2;
+  string name = 3;
+  string description = 4;
   string permalink = 5;
 }
 
 message GetPatchRequest {
   string id = 1;
+}
+
+message ValidateNameRequest {
+  string name = 1;
 }

@@ -24,7 +24,7 @@ export class UploadComponent implements OnInit {
   patch: THRL6P = null;
 
   metadataForm = new FormGroup({
-    name: new FormControl(null, [Validators.required]),
+    name: new FormControl(null, [Validators.required, Validators.maxLength(64)]),
     description: new FormControl(null, [Validators.maxLength(1024)])
   });
 
@@ -34,12 +34,17 @@ export class UploadComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  f(field: string) {
+    return this.metadataForm.get(field);
+  }
+
   fileLoaded(f: ThrFile) {
     console.log(f);
     this.file = f;
     this.patch = JSON.parse(f.data) as THRL6P;
 
-    this.metadataForm.get('name').setValue(this.patch?.data?.meta?.name);
+    this.f('name').setValue(this.patch?.data?.meta?.name);
+    this.nameChanged();
   }
 
   submit() {
@@ -47,9 +52,8 @@ export class UploadComponent implements OnInit {
       .createPatch(
         {
           body: {
-            name: this.metadataForm.get('name').value,
             description: this.metadataForm.get('description').value,
-            patch: this.file.data
+            patch: JSON.stringify(this.patch),
           }
         }
       ).subscribe((res: Thrl6pPatch) => {
@@ -65,4 +69,16 @@ export class UploadComponent implements OnInit {
     this.metadataForm.reset({ name: '', description: '' });
   }
 
+  nameChanged() {
+    const nameValue = this.f('name').value;
+    this.apiClient.validateName({ body: { name: nameValue } }).subscribe((resp) => {
+        this.patch.data.meta.name = nameValue;
+      },
+      (err) => {
+        this.f('name').setErrors({
+          ...this.f('name').errors,
+          nameNotAvailableReason: err.error.details[0].description
+        });
+      });
+  }
 }

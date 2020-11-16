@@ -2,7 +2,7 @@
   <div class="row mb-3">
     <div class="col">
       <span class="patch-title">{{ patch?.name }}</span>
-      <button type="button" class="btn btn-primary float-right">Download</button>
+      <button type="button" class="btn btn-primary float-right" (click)="downloadPatch()">Download</button>
     </div>
   </div>
   <div class="row mb-4">
@@ -11,17 +11,18 @@
         <div class="card-header">
           <strong>Details</strong>
         </div>
-        <div class="card-body">
+        <div class="card-body pb-5">
           <p>
             {{ patch?.description || "No Description..."}}
           </p>
+          <hr>
           <div class="mb-3">
-            This Page:
-            <div class="w-100 mt-1 p-1 inset-block">URL</div>
+            <strong>This Page:</strong>
+            <div class="w-100 mt-1 p-2 inset-block">todo</div>
           </div>
           <div>
-            Direct Patch Download:
-            <div class="w-100 mt-1 p-1 inset-block">URL</div>
+            <strong>Direct Patch Download:</strong>
+            <div class="w-100 mt-1 p-2 inset-block">todo: {{ patch?.permalink }}</div>
           </div>
         </div>
       </div>
@@ -29,7 +30,7 @@
   </div>
   <div class="row mb-5">
     <div class="col">
-      <app-patch-viewer *ngIf="patch" [raw]="patch.patch" [patch]="parsed"></app-patch-viewer>
+      <app-patch-viewer *ngIf="patch" [patch]="parsed"></app-patch-viewer>
     </div>
   </div>
 </div>

@@ -32,10 +32,12 @@ body {
   background-color: transparent;
 }
 
-.form-control {
-  border: none;
-  background-color: $grey-3;
-  color: #f2f2f2;
+.custom-file-label::after {
+  background-color: $primary;
+}
+
+label {
+  font-weight: bold;
 }
 
 .inset-block {

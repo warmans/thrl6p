@@ -2,10 +2,13 @@ package grpc
 
 import (
 	"context"
+	"encoding/json"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/teris-io/shortid"
 	v1 "github.com/warmans/thrl6p/server/gen/api/v1"
+	"github.com/warmans/thrl6p/server/pkg/patch"
 	"google.golang.org/grpc"
 )
 
@@ -33,9 +36,14 @@ func (b *PatchService) RegisterHTTP(ctx context.Context, router *mux.Router, mux
 
 func (b *PatchService) CreatePatch(ctx context.Context, request *v1.CreatePatchRequest) (*v1.Patch, error) {
 
+	p := &patch.THRL6P{}
+	if err := json.Unmarshal([]byte(request.Patch), p); err != nil {
+		return nil, ErrInvalidRequestField("patch", err.Error()).Err()
+	}
+
 	b.temp = &v1.Patch{
 		Id:          shortid.MustGenerate(),
-		Name:        request.Name,
+		Name:        p.Data.Meta.Name,
 		Description: request.Description,
 		Patch:       request.Patch,
 		Permalink:   "",
@@ -46,4 +54,14 @@ func (b *PatchService) CreatePatch(ctx context.Context, request *v1.CreatePatchR
 
 func (b *PatchService) GetPatch(ctx context.Context, request *v1.GetPatchRequest) (*v1.Patch, error) {
 	return b.temp, nil
+}
+
+func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNameRequest) (*empty.Empty, error) {
+	if b.temp == nil {
+		return &empty.Empty{}, nil
+	}
+	if request.Name == b.temp.Name {
+		return nil, ErrInvalidRequestField("name", "Name is not unique").Err()
+	}
+	return &empty.Empty{}, nil
 }

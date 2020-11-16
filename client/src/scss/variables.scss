@@ -1,7 +1,7 @@
 $background-color: #17191F !default;
-$font-color: #f2f2f2 !default;
+$font-color: #f7f7ff !default;
 
-$primary: #457b9d;
+
 
 $grey-1: #343A40;
 $grey-2: darken($grey-1, 5%);
@@ -9,11 +9,29 @@ $grey-3: darken($grey-1, 10%);
 
 // overrides
 
+$primary: #457B9D;
+
+// https://coolors.co/858786-28587b-457b9d-649cbc-3d8a5f-65a572-90bf8d-f2cb82-e29b68-cb7462
+$danger: #CB7462;
+$success: #65A572;
+$warning: #F2CB82;
+
 $border-radius: 0;
 $border-radius-lg: 0;
 $border-radius-sm: 0;
 
 $progress-bg: $grey-3;
+
+$input-bg: $grey-3;
+$input-color: $font-color;
+$input-border-color: $grey-3;
+$input-box-shadow: none;
+$input-focus-box-shadow: none;
+$input-focus-border-color: #000;
+
+$input-group-addon-color:               $input-color !default;
+$input-group-addon-bg:                  $grey-2;
+$input-group-addon-border-color:        $input-border-color !default;
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";

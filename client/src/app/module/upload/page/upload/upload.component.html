@@ -19,17 +19,45 @@
             <div class="card-body">
               <div class="form-group">
                 <label for="name">Name</label>
-                <input id="name" name="name" class="form-control form-control-sm" formControlName="name"
-                       [value]="patch.data.meta.name"/>
+                <div class="input-group mb-2 mr-sm-2">
+                  <input
+                          id="name"
+                          name="name"
+                          class="form-control"
+                          formControlName="name"
+                          placeholder="Give your patch a meaningful name"
+                          [value]="patch.data.meta.name"
+                          (change)="nameChanged()"/>
+                  <div class="input-group-append">
+                    <div
+                        class="input-group-text"
+                        [ngClass]="{'text-danger': f('name')?.errors?.nameNotAvailableReason, 'text-success': !f('name')?.errors?.nameNotAvailableReason}"
+                        title="The name must be unique">
+                      Available
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="f('name').invalid" class="text-danger mt-1 p-1">
+                  <div *ngIf="f('name').errors.required">
+                    Name is required.
+                  </div>
+                  <div *ngIf="f('name').errors.maxlength">
+                    Name is too long (max length is {{ f('name').errors.maxlength.requiredLength }} characters).
+                  </div>
+                  <div *ngIf="f('name').errors.nameNotAvailableReason">
+                    {{ f('name').errors.nameNotAvailableReason }}.
+                  </div>
+                </div>
               </div>
               <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control form-control-sm" id="description" name="description"
-                          formControlName="description"></textarea>
+                <textarea class="form-control" id="description" name="description"
+                          formControlName="description"
+                          placeholder="Describe the patch e.g. what style of music it is used for."></textarea>
               </div>
               <div class="text-right">
                 <button class="btn btn-sm btn-secondary mr-2" (click)="cancel()">Discard</button>
-                <button class="btn btn-sm btn-primary" type="submit">Confirm</button>
+                <button class="btn btn-sm btn-primary" type="submit" [disabled]="f('name').invalid">Confirm</button>
               </div>
             </div>
           </div>
@@ -37,7 +65,7 @@
       </div>
       <div class="row mb-4">
         <div class="col">
-          <app-patch-viewer [raw]="file.data" [patch]="patch"></app-patch-viewer>
+          <app-patch-viewer [patch]="patch"></app-patch-viewer>
         </div>
       </div>
     </form>

@@ -62,6 +62,25 @@ export class PatchServiceAPIClient implements PatchServiceAPIClientInterface {
   }
 
   /**
+   * Validate a patch name.
+   * Response generated for [ 200 ] HTTP response code.
+   */
+  validateName(
+    args: {
+      body: models.Thrl6pValidateNameRequest,
+    },
+    requestHttpOptions?: HttpOptions
+  ): Observable<object> {
+    const path = `/api/patch/validate/name`;
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
+
+    return this.sendRequest<object>('POST', path, options, JSON.stringify(args.body));
+  }
+
+  /**
    * Gets a patch with associated metadata.
    * Response generated for [ 200 ] HTTP response code.
    */

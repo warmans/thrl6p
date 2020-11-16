@@ -11,14 +11,19 @@ export class PatchViewerComponent implements OnInit {
   @Input()
   patch: THRL6P = null;
 
-  @Input()
-  raw: string = null;
-
   showRaw: boolean;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  toggleRaw() {
+    this.showRaw = !this.showRaw;
+  }
+
+  rawPatch(): string {
+    return JSON.stringify(this.patch, null, '  ');
   }
 
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PatchServiceAPIClient } from '../../../../lib/api-client/services/patch-service';
 import { Thrl6pPatch } from '../../../../lib/api-client/models';
 import { THRL6P } from '../../../../lib/thrl6p/thrl6p';
+import { downloadPatch, toFileName } from '../../../../lib/util/download';
 
 @Component({
   selector: 'app-view',
@@ -12,6 +13,7 @@ import { THRL6P } from '../../../../lib/thrl6p/thrl6p';
 export class ViewComponent implements OnInit {
 
   patch: Thrl6pPatch = null;
+
   parsed: THRL6P = null;
 
   constructor(private route: ActivatedRoute, private apiClient: PatchServiceAPIClient) {
@@ -24,5 +26,9 @@ export class ViewComponent implements OnInit {
         this.parsed = JSON.parse(res.patch) as THRL6P;
       }
     );
+  }
+
+  downloadPatch() {
+    downloadPatch(toFileName(this.patch.name), JSON.stringify(this.parsed, null, '  '));
   }
 }
