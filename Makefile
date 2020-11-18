@@ -2,6 +2,11 @@ ifndef MAKE_DEBUG
     MAKEFLAGS += -s
 endif
 
+DEV_DB_USER ?= thrl6p
+DEV_DB_PASS ?= insecure
+DEV_DB_HOST ?= localhost
+DEV_DB_DSN ?= "postgres://$(DEV_DB_USER):$(DEV_DB_PASS)@$(DEV_DB_HOST):5432/$(DEV_DB_USER)?sslmode=disable"
+
 .PHONY: server.vendor
 server.vendor:
 	cd server && \
@@ -19,11 +24,15 @@ server.tools:
 	done;
 
 .PHONY: generate
-generate: generate.proto generate.api-client
+generate: generate.proto generate.code generate.api-client
 
 .PHONY: generate.proto
 generate.proto:
 	cd server && rm -rf gen/api && prototool generate proto
+
+.PHONY: generate.code
+generate.code:
+	cd server && go generate `go list ./...`
 
 .PHONY: generate.api-client
 generate.api-client:
@@ -43,4 +52,9 @@ server.build.%:
 
 .PHONY: server.run
 server.run:
-	cd server/bin && ./server
+	cd server/bin && DB_DSN=$(DEV_DB_DSN) ./server
+
+
+.PHONY: env.run
+env.run:
+	cd dev; POSTGRES_USER=$(DEV_DB_USER) POSTGRES_PASSWORD=$(DEV_DB_PASS) docker-compose up
