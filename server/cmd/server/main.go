@@ -2,20 +2,30 @@ package main
 
 import (
 	_ "github.com/lib/pq"
+	"github.com/warmans/thrl6p/server/pkg/flag"
 	"github.com/warmans/thrl6p/server/pkg/server"
 	"github.com/warmans/thrl6p/server/pkg/service/grpc"
 	"github.com/warmans/thrl6p/server/pkg/service/http"
 	"github.com/warmans/thrl6p/server/pkg/store"
 	"go.uber.org/zap"
-	"os"
 )
 
+const ServicePrefix = "THRL6P"
+
 func main() {
+
+	dbCfg := &store.Config{}
+	dbCfg.RegisterFlags(ServicePrefix)
+
+	grpcCfg := server.GrpcServerConfig{}
+	grpcCfg.RegisterFlags(ServicePrefix)
+
+	flag.Parse()
 
 	logger := newLogger()
 	defer logger.Sync()
 
-	db, err := store.NewConn(os.Getenv("DB_DSN")) // todo flags
+	db, err := store.NewConn(dbCfg)
 	if err != nil {
 		logger.Fatal("failed to create DB connection", zap.Error(err))
 	}
@@ -25,18 +35,13 @@ func main() {
 	}
 
 	grpcServices := []server.GRPCService{
-		grpc.NewPatchService(grpc.PatchServiceConfig{}, db),
+		grpc.NewPatchService(db),
 	}
 	httpServices := []server.HTTPService{
 		http.NewDownloadService(),
 	}
 
-	// todo: flags
-	conf := server.GrpcServerConfig{
-		GRPCAddr: "0.0.0.0:9090",
-		HTTPAddr: ":8888",
-	}
-	srv, err := server.NewServer(logger, conf, grpcServices, httpServices)
+	srv, err := server.NewServer(logger, grpcCfg, grpcServices, httpServices)
 	if err != nil {
 		logger.Fatal("failed to create server", zap.Error(err))
 	}

@@ -6,14 +6,23 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/teris-io/shortid"
+	"github.com/warmans/thrl6p/server/pkg/flag"
 	"github.com/warmans/thrl6p/server/pkg/store/model"
 	"github.com/warmans/thrl6p/server/pkg/util"
 	"strings"
 	"time"
 )
 
-func NewConn(dsn string) (*Conn, error) {
-	db, err := sqlx.Connect("postgres", dsn)
+type Config struct {
+	DSN string
+}
+
+func (c *Config) RegisterFlags(prefix string) {
+	flag.StringVarEnv(&c.DSN, prefix, "db-dsn", "", "DB connection string")
+}
+
+func NewConn(cfg *Config) (*Conn, error) {
+	db, err := sqlx.Connect("postgres", cfg.DSN)
 	if err != nil {
 		return nil, err
 	}
@@ -104,6 +113,10 @@ func (c *Conn) WithStore(f func(s *Store) error) error {
 	})
 }
 
+func (c *Conn) Store() *Store {
+
+}
+
 type Store struct {
 	tx *sqlx.Tx
 }
@@ -116,4 +129,12 @@ func (s *Store) CreatePatch(patch *model.Patch) error {
 		patch,
 	)
 	return err
+}
+
+func (s *Store) GetPatch(id string) (resp *model.Patch, err error) {
+	return resp, s.tx.Get(resp, `SELECT * FROM "patch" WHERE id=?`, id)
+}
+
+func (s *Store) ListPatches() ([]*model.Patch, error) {
+
 }

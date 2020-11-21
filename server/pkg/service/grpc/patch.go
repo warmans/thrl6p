@@ -9,19 +9,16 @@ import (
 	v1 "github.com/warmans/thrl6p/server/gen/api/v1"
 	"github.com/warmans/thrl6p/server/pkg/patch"
 	"github.com/warmans/thrl6p/server/pkg/store"
+	"github.com/warmans/thrl6p/server/pkg/store/model"
 	"google.golang.org/grpc"
 )
 
-type PatchServiceConfig struct {
-}
-
-func NewPatchService(cfg PatchServiceConfig, db *store.Conn) *PatchService {
-	return &PatchService{cfg: cfg, db: db}
+func NewPatchService(db *store.Conn) *PatchService {
+	return &PatchService{db: db}
 }
 
 type PatchService struct {
-	cfg PatchServiceConfig
-	db  *store.Conn
+	db *store.Conn
 }
 
 func (b *PatchService) RegisterGRPC(server *grpc.Server) {
@@ -34,28 +31,41 @@ func (b *PatchService) RegisterHTTP(ctx context.Context, router *mux.Router, mux
 	}
 }
 
-func (b *PatchService) CreatePatch(ctx context.Context, request *v1.CreatePatchRequest) (*v1.Patch, error) {
+func (b *PatchService) CreatePatch(ctx context.Context, req *v1.CreatePatchRequest) (*v1.Patch, error) {
 
 	p := &patch.THRL6P{}
-	if err := json.Unmarshal([]byte(request.Patch), p); err != nil {
+	if err := json.Unmarshal([]byte(req.Patch), p); err != nil {
 		return nil, ErrInvalidRequestField("patch", err.Error()).Err()
 	}
 
-	return nil, nil
+	rec := &model.Patch{
+		Name:        p.Data.Meta.Name,
+		Description: req.Patch,
+		Patch:       req.Patch,
+	}
+	if err := b.db.WithStore(func(s *store.Store) error {
+		return s.CreatePatch(rec)
+	}); err != nil {
+		return nil, ErrInternal().Err()
+	}
 
-	//b.temp = &v1.Patch{
-	//	Id:          shortid.MustGenerate(),
-	//	Name:        p.Data.Meta.Name,
-	//	Description: request.Description,
-	//	Patch:       request.Patch,
-	//	Permalink:   "",
-	//}
-	//
-	//return b.temp, nil
+	//todo: permalink
+	return rec.Proto(""), nil
 }
 
-func (b *PatchService) GetPatch(ctx context.Context, request *v1.GetPatchRequest) (*v1.Patch, error) {
-	return nil, nil
+func (b *PatchService) GetPatch(ctx context.Context, request *v1.GetPatchRequest) (resp *v1.Patch, err error) {
+	err = b.db.WithStore(func(s *store.Store) error {
+		rec, err := s.GetPatch(request.Id)
+		if err != nil {
+			return err
+		}
+		resp = rec.Proto("") //todo: permalink
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
 }
 
 func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNameRequest) (*empty.Empty, error) {

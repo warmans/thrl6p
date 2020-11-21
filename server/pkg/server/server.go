@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/pkg/errors"
+	"github.com/warmans/thrl6p/server/pkg/flag"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"net"
@@ -25,6 +26,11 @@ type HTTPService interface {
 type GrpcServerConfig struct {
 	GRPCAddr string
 	HTTPAddr string
+}
+
+func (c *GrpcServerConfig) RegisterFlags(prefix string) {
+	flag.StringVarEnv(&c.GRPCAddr, prefix, "grpc-addr", "0.0.0.0:9090", "GRPC bind address")
+	flag.StringVarEnv(&c.HTTPAddr, prefix, "http-addr", ":8888", "HTTP bind address")
 }
 
 func NewServer(logger *zap.Logger, cfg GrpcServerConfig, grpcServices []GRPCService, httpServices []HTTPService) (*Server, error) {

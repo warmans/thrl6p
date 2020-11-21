@@ -52,7 +52,7 @@ server.build.%:
 
 .PHONY: server.run
 server.run:
-	cd server/bin && DB_DSN=$(DEV_DB_DSN) ./server
+	cd server/bin && THRL6P_DB_DSN=$(DEV_DB_DSN) ./server
 
 
 .PHONY: env.run
