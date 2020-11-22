@@ -46,12 +46,13 @@ type token struct {
 	lexeme string
 }
 
+func (t token) String() string {
+	return fmt.Sprintf("{%s: '%s'}", string(t.tag), t.lexeme)
+}
+
 func Scan(str string) ([]token, error) {
-	scanner := scanner{
-		input:  []rune(str),
-		pos:    0,
-		offset: 0,
-	}
+
+	scanner := newScanner(str)
 
 	tokens := make([]token, 0)
 	for {
@@ -68,13 +69,26 @@ func Scan(str string) ([]token, error) {
 	return tokens, nil
 }
 
+func newScanner(str string) *scanner {
+	return &scanner{
+		input:  []rune(str),
+		pos:    0,
+		offset: 0,
+	}
+}
+
 type scanner struct {
 	input  []rune
 	pos    int
 	offset int
 }
 
+// Gets the next token, advancing the scanner.
 func (s *scanner) Next() (token, error) {
+	return s.next()
+}
+
+func (s *scanner) next() (token, error) {
 	s.skipWhitespace()
 
 	if s.atEOF() {
@@ -133,7 +147,7 @@ func (s *scanner) nextRune() rune {
 
 // matchNextRune will match the next rune of a multi-run tag e.g. >= !=
 func (s *scanner) matchNextRune(r rune) bool {
-	if s.atEOF() || s.peek() != r {
+	if s.atEOF() || s.peekRune() != r {
 		return false
 	}
 	s.nextRune()
@@ -141,16 +155,16 @@ func (s *scanner) matchNextRune(r rune) bool {
 }
 
 func (s *scanner) skipWhitespace() {
-	for !s.atEOF() && unicode.IsSpace(s.peek()) {
+	for !s.atEOF() && unicode.IsSpace(s.peekRune()) {
 		s.nextRune()
 	}
 	s.offset = s.pos
 }
 
 func (s *scanner) scanField() (token, error) {
-	for !s.atEOF() && (isLetter(s.peek()) || isNumber(s.peek()) || s.peek() == '.') {
+	for !s.atEOF() && (isLetter(s.peekRune()) || isNumber(s.peekRune()) || s.peekRune() == '.') {
 		r := s.nextRune()
-		if r == '.' && (s.atEOF() || isLetter(s.peek())) {
+		if r == '.' && (s.atEOF() || isLetter(s.peekRune())) {
 			return s.error("invalid field")
 		}
 	}
@@ -163,7 +177,7 @@ func (s *scanner) scanField() (token, error) {
 
 func (s *scanner) scanNumber() token {
 	hasDecimal := false
-	for !s.atEOF() && (isNumber(s.peek()) || s.peek() == '.' && !hasDecimal) {
+	for !s.atEOF() && (isNumber(s.peekRune()) || s.peekRune() == '.' && !hasDecimal) {
 		r := s.nextRune()
 		hasDecimal = hasDecimal || r == '.'
 	}
@@ -187,7 +201,7 @@ func (s *scanner) atEOF() bool {
 	return s.pos >= len(s.input)
 }
 
-func (s *scanner) peek() rune {
+func (s *scanner) peekRune() rune {
 	return s.input[s.pos]
 }
 
