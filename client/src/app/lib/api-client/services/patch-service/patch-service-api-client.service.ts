@@ -43,6 +43,36 @@ export class PatchServiceAPIClient implements PatchServiceAPIClientInterface {
   }
 
   /**
+   * Lists patches.
+   * Response generated for [ 200 ] HTTP response code.
+   */
+  listPatch(
+    args: {
+      filter?: string,
+      pageSize?: number,
+      page?: number,
+    },
+    requestHttpOptions?: HttpOptions
+  ): Observable<models.Thrl6pPatchList> {
+    const path = `/api/patch`;
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
+
+    if ('filter' in args) {
+      options.params = options.params.set('filter', String(args.filter));
+    }
+    if ('pageSize' in args) {
+      options.params = options.params.set('pageSize', String(args.pageSize));
+    }
+    if ('page' in args) {
+      options.params = options.params.set('page', String(args.page));
+    }
+    return this.sendRequest<models.Thrl6pPatchList>('GET', path, options);
+  }
+
+  /**
    * Uploads a new patch.
    * Response generated for [ 200 ] HTTP response code.
    */

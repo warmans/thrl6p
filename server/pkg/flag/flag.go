@@ -17,7 +17,8 @@ func stringFromEnv(p *string, prefix, name string) {
 	if val == "" {
 		return
 	}
-	p = &val
+	valPtr := &val
+	*p = *valPtr
 }
 
 func Parse() {

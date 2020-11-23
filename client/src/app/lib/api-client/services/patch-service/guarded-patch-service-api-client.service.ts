@@ -22,6 +22,18 @@ export class GuardedPatchServiceAPIClient extends PatchServiceAPIClient {
     super(httpClient, domain, options);
   }
 
+  listPatch(
+    args: {
+      filter?: string,
+      pageSize?: number,
+      page?: number,
+    },
+    requestHttpOptions?: HttpOptions
+  ): Observable<models.Thrl6pPatchList> {
+    return super.listPatch(args, requestHttpOptions)
+      .pipe(tap((res: any) => guards.isThrl6pPatchList(res) || console.error(`TypeGuard for response 'Thrl6pPatchList' caught inconsistency.`, res)));
+  }
+
   createPatch(
     args: {
       body: models.Thrl6pCreatePatchRequest,

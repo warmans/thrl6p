@@ -23,7 +23,6 @@ const (
 	BoolOpOr  BoolOp = "or"
 )
 
-// Precedence returns the precedence of the operator.
 func (op BoolOp) Precedence() int {
 	switch op {
 	case BoolOpAnd:
@@ -43,7 +42,6 @@ type Visitor interface {
 type Filter interface {
 	Accept(Visitor) error
 	Precedence() int
-	String() string
 }
 
 type CompFilter struct {
@@ -61,10 +59,6 @@ func (c *CompFilter) Accept(visitor Visitor) error {
 
 func (c *CompFilter) Precedence() int {
 	return c.Op.Precedence()
-}
-
-func (c *CompFilter) String() string {
-	panic("implement me")
 }
 
 type BoolFilter struct {
@@ -96,10 +90,6 @@ func (b *BoolFilter) Accept(visitor Visitor) error {
 
 func (b *BoolFilter) Precedence() int {
 	return b.Op.Precedence()
-}
-
-func (b *BoolFilter) String() string {
-	panic("implement me")
 }
 
 func And(lhs, rhs Filter, filters ...Filter) Filter {

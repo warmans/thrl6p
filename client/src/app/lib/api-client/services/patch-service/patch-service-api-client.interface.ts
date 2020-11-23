@@ -7,6 +7,19 @@ import * as models from '../../models';
 export interface PatchServiceAPIClientInterface {
 
   /**
+   * Lists patches.
+   * Response generated for [ 200 ] HTTP response code.
+   */
+  listPatch(
+    args: {
+      filter?: string,
+      pageSize?: number,
+      page?: number,
+    },
+    requestHttpOptions?: HttpOptions
+  ): Observable<models.Thrl6pPatchList>;
+
+  /**
    * Uploads a new patch.
    * Response generated for [ 200 ] HTTP response code.
    */

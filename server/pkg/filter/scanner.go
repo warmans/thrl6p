@@ -125,7 +125,7 @@ func (s *scanner) next() (token, error) {
 	case '"':
 		return s.scanString()
 	default:
-		if isLetter(r) {
+		if isValidFieldRune(r) {
 			field, err := s.scanField()
 			if err != nil {
 				return token{}, err
@@ -162,9 +162,9 @@ func (s *scanner) skipWhitespace() {
 }
 
 func (s *scanner) scanField() (token, error) {
-	for !s.atEOF() && (isLetter(s.peekRune()) || isNumber(s.peekRune()) || s.peekRune() == '.') {
+	for !s.atEOF() && (isValidFieldRune(s.peekRune()) || isNumber(s.peekRune())) {
 		r := s.nextRune()
-		if r == '.' && (s.atEOF() || isLetter(s.peekRune())) {
+		if r == '.' && (s.atEOF()) {
 			return s.error("invalid field")
 		}
 	}
@@ -223,8 +223,8 @@ func isNumber(r rune) bool {
 	return r >= '0' && r <= '9'
 }
 
-func isLetter(r rune) bool {
-	return (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || r == '_'
+func isValidFieldRune(r rune) bool {
+	return (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || r == '_' || r == '@' || r == '.'
 }
 
 func trimTokenLexeme(t token, trimSet string) token {

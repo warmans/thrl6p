@@ -12,6 +12,49 @@
   ],
   "paths": {
     "/api/patch": {
+      "get": {
+        "description": "Lists patches.",
+        "operationId": "PatchService_ListPatch",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/thrl6pPatchList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "PatchService"
+        ]
+      },
       "post": {
         "description": "Uploads a new patch.",
         "operationId": "PatchService_CreatePatch",
@@ -174,6 +217,17 @@
         },
         "permalink": {
           "type": "string"
+        }
+      }
+    },
+    "thrl6pPatchList": {
+      "type": "object",
+      "properties": {
+        "patches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/thrl6pPatch"
+          }
         }
       }
     },

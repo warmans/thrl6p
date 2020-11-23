@@ -32,7 +32,7 @@ func (s StringValue) Value() interface{} {
 }
 
 func (s StringValue) String() string {
-	return string(s)
+	return fmt.Sprintf(`"%s"`, string(s))
 }
 
 func Bool(v bool) BoolValue {

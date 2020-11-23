@@ -46,6 +46,17 @@ export function isThrl6pPatch(arg: any): arg is models.Thrl6pPatch {
   );
   }
 
+export function isThrl6pPatchList(arg: any): arg is models.Thrl6pPatchList {
+  return (
+  arg != null &&
+  typeof arg === 'object' &&
+    // patches?: Thrl6pPatch[]
+    ( typeof arg.patches === 'undefined' || (Array.isArray(arg.patches) && arg.patches.every((item: unknown) => isThrl6pPatch(item))) ) &&
+
+  true
+  );
+  }
+
 export function isThrl6pValidateNameRequest(arg: any): arg is models.Thrl6pValidateNameRequest {
   return (
   arg != null &&

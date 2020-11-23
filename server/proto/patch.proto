@@ -37,6 +37,15 @@ service PatchService {
       description: "Gets a patch with associated metadata."
     };
   }
+
+  rpc ListPatch(ListPatchesRequest) returns (PatchList) {
+    option (google.api.http) = {
+      get: "/api/patch"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Lists patches."
+    };
+  }
 }
 
 message CreatePatchRequest {
@@ -58,4 +67,14 @@ message GetPatchRequest {
 
 message ValidateNameRequest {
   string name = 1;
+}
+
+message ListPatchesRequest {
+  string filter = 1;
+  int32 pageSize = 2;
+  int32 page = 3;
+}
+
+message PatchList {
+  repeated Patch patches = 1;
 }

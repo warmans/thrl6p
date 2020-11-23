@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	v1 "github.com/warmans/thrl6p/server/gen/api/v1"
+	"github.com/warmans/thrl6p/server/pkg/filter"
 	"github.com/warmans/thrl6p/server/pkg/patch"
 	"github.com/warmans/thrl6p/server/pkg/store"
 	"github.com/warmans/thrl6p/server/pkg/store/model"
@@ -40,7 +41,7 @@ func (b *PatchService) CreatePatch(ctx context.Context, req *v1.CreatePatchReque
 
 	rec := &model.Patch{
 		Name:        p.Data.Meta.Name,
-		Description: req.Patch,
+		Description: req.Description,
 		Patch:       req.Patch,
 	}
 	if err := b.db.WithStore(func(s *store.Store) error {
@@ -55,7 +56,7 @@ func (b *PatchService) CreatePatch(ctx context.Context, req *v1.CreatePatchReque
 
 func (b *PatchService) GetPatch(ctx context.Context, request *v1.GetPatchRequest) (resp *v1.Patch, err error) {
 	err = b.db.WithStore(func(s *store.Store) error {
-		rec, err := s.GetPatch(request.Id)
+		rec, err := s.GetPatch(ctx, request.Id)
 		if err != nil {
 			return err
 		}
@@ -68,6 +69,42 @@ func (b *PatchService) GetPatch(ctx context.Context, request *v1.GetPatchRequest
 	return
 }
 
+func (b *PatchService) ListPatch(ctx context.Context, request *v1.ListPatchesRequest) (*v1.PatchList, error) {
+	f, err := filter.Parse(request.Filter)
+	if err != nil {
+		return nil, ErrInvalidRequestField("filter", err.Error()).Err()
+	}
+
+	var patches []*model.Patch
+	err = b.db.WithStore(func(s *store.Store) error {
+		patches, err = s.ListPatches(ctx, f, request.PageSize, request.Page)
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	proto := &v1.PatchList{Patches: make([]*v1.Patch, len(patches))}
+	for k, v := range patches {
+		proto.Patches[k] = v.Proto("")
+	}
+	return proto, nil
+}
+
 func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNameRequest) (*empty.Empty, error) {
-	return nil, ErrInvalidRequestField("name", "Name is not unique").Err()
+	err := b.db.WithStore(func(s *store.Store) error {
+		yes, err := s.PatchNameExists(ctx, request.Name)
+		if err != nil {
+			//todo: log error?
+			return ErrInternal().Err()
+		}
+		if !yes {
+			return nil
+		}
+		return ErrInvalidRequestField("name", "Name is not unique").Err()
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &empty.Empty{}, nil
 }

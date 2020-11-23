@@ -5,6 +5,14 @@ import (
 	"strconv"
 )
 
+func MustParse(s string) Filter {
+	f, err := Parse(s)
+	if err != nil {
+		panic(err)
+	}
+	return f
+}
+
 func Parse(s string) (Filter, error) {
 	if s == "" {
 		return nil, nil
