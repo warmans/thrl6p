@@ -4,9 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/pkg/errors"
 	"github.com/warmans/thrl6p/server/pkg/flag"
+	"github.com/warmans/thrl6p/server/pkg/server/middleware"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"net"
@@ -34,10 +40,26 @@ func (c *GrpcServerConfig) RegisterFlags(prefix string) {
 }
 
 func NewServer(logger *zap.Logger, cfg GrpcServerConfig, grpcServices []GRPCService, httpServices []HTTPService) (*Server, error) {
+
+	grpc := grpc.NewServer(
+		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+			grpc_ctxtags.StreamServerInterceptor(),
+			grpc_zap.StreamServerInterceptor(logger, grpc_zap.WithMessageProducer(middleware.LogMessageProducer())),
+			grpc_validator.StreamServerInterceptor(),
+			grpc_recovery.StreamServerInterceptor(),
+		)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_ctxtags.UnaryServerInterceptor(),
+			grpc_zap.UnaryServerInterceptor(logger, grpc_zap.WithMessageProducer(middleware.LogMessageProducer())),
+			grpc_validator.UnaryServerInterceptor(),
+			grpc_recovery.UnaryServerInterceptor(),
+		)),
+	)
+
 	s := &Server{
 		cfg:          cfg,
 		logger:       logger,
-		grpc:         grpc.NewServer(),
+		grpc:         grpc,
 		grpcServices: grpcServices,
 		httpServices: httpServices,
 	}

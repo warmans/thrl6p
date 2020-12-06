@@ -44,6 +44,13 @@ export class GuardedPatchServiceAPIClient extends PatchServiceAPIClient {
       .pipe(tap((res: any) => guards.isThrl6pPatch(res) || console.error(`TypeGuard for response 'Thrl6pPatch' caught inconsistency.`, res)));
   }
 
+  metadata(
+    requestHttpOptions?: HttpOptions
+  ): Observable<models.Thrl6pMeta> {
+    return super.metadata(requestHttpOptions)
+      .pipe(tap((res: any) => guards.isThrl6pMeta(res) || console.error(`TypeGuard for response 'Thrl6pMeta' caught inconsistency.`, res)));
+  }
+
   validateName(
     args: {
       body: models.Thrl6pValidateNameRequest,

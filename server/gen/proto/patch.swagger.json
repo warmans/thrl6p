@@ -87,6 +87,29 @@
         ]
       }
     },
+    "/api/patch/metadata": {
+      "get": {
+        "description": "Metadata for the patch properties.",
+        "operationId": "PatchService_Metadata",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/thrl6pMeta"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "tags": [
+          "PatchService"
+        ]
+      }
+    },
     "/api/patch/validate/name": {
       "post": {
         "description": "Validate a patch name.",
@@ -153,6 +176,31 @@
     }
   },
   "definitions": {
+    "AmpMetaAmp": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN_AMP_GROUP",
+        "CLASSIC",
+        "BOUTIQUE",
+        "MODERN"
+      ],
+      "default": "UNKNOWN_AMP_GROUP"
+    },
+    "ChannelMetaChannel": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN_CHANNEL",
+        "CLEAN",
+        "CRUNCH",
+        "LEAD",
+        "HI_GAIN",
+        "SPECIAL",
+        "BASS",
+        "ACOUSTIC",
+        "FLAT"
+      ],
+      "default": "UNKNOWN_CHANNEL"
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -189,6 +237,37 @@
         }
       }
     },
+    "thrl6pAmpMeta": {
+      "type": "object",
+      "properties": {
+        "amp": {
+          "$ref": "#/definitions/AmpMetaAmp"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/thrl6pChannelMeta"
+          }
+        }
+      }
+    },
+    "thrl6pChannelMeta": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "$ref": "#/definitions/ChannelMetaChannel"
+        },
+        "name": {
+          "type": "string"
+        },
+        "inspired_by": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "thrl6pCreatePatchRequest": {
       "type": "object",
       "properties": {
@@ -197,6 +276,17 @@
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "thrl6pMeta": {
+      "type": "object",
+      "properties": {
+        "amps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/thrl6pAmpMeta"
+          }
         }
       }
     },

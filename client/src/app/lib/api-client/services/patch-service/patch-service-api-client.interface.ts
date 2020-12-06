@@ -31,6 +31,14 @@ export interface PatchServiceAPIClientInterface {
   ): Observable<models.Thrl6pPatch>;
 
   /**
+   * Metadata for the patch properties.
+   * Response generated for [ 200 ] HTTP response code.
+   */
+  metadata(
+    requestHttpOptions?: HttpOptions
+  ): Observable<models.Thrl6pMeta>;
+
+  /**
    * Validate a patch name.
    * Response generated for [ 200 ] HTTP response code.
    */

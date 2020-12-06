@@ -20,6 +20,17 @@ func ErrInvalidRequestField(field string, reason string) *status.Status {
 	return s
 }
 
-func ErrInternal() *status.Status {
-	return status.New(codes.Internal, http.StatusText(http.StatusInternalServerError))
+func ErrInternal(err error) *status.Status {
+	if err == nil {
+		return status.New(codes.Internal, http.StatusText(http.StatusInternalServerError))
+	}
+	s, err := status.New(codes.Internal, http.StatusText(http.StatusInternalServerError)).WithDetails(
+		&errdetails.DebugInfo{
+			Detail: err.Error(),
+		},
+	)
+	if err != nil {
+		return status.New(codes.Internal, "failed to create error")
+	}
+	return s
 }

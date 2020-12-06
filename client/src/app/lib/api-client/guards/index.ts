@@ -14,6 +14,59 @@ return arg != null && typeof arg.lastModified === 'number' && typeof arg.name ==
 
 /* generated type guards */
 
+export function isAmpMetaAmp(arg: any): arg is models.AmpMetaAmp {
+  return false
+   || arg === models.AmpMetaAmp.UNKNOWN_AMP_GROUP
+   || arg === models.AmpMetaAmp.CLASSIC
+   || arg === models.AmpMetaAmp.BOUTIQUE
+   || arg === models.AmpMetaAmp.MODERN
+  ;
+  }
+
+export function isChannelMetaChannel(arg: any): arg is models.ChannelMetaChannel {
+  return false
+   || arg === models.ChannelMetaChannel.UNKNOWN_CHANNEL
+   || arg === models.ChannelMetaChannel.CLEAN
+   || arg === models.ChannelMetaChannel.CRUNCH
+   || arg === models.ChannelMetaChannel.LEAD
+   || arg === models.ChannelMetaChannel.HI_GAIN
+   || arg === models.ChannelMetaChannel.SPECIAL
+   || arg === models.ChannelMetaChannel.BASS
+   || arg === models.ChannelMetaChannel.ACOUSTIC
+   || arg === models.ChannelMetaChannel.FLAT
+  ;
+  }
+
+export function isThrl6pAmpMeta(arg: any): arg is models.Thrl6pAmpMeta {
+  return (
+  arg != null &&
+  typeof arg === 'object' &&
+    // amp?: AmpMetaAmp
+    ( typeof arg.amp === 'undefined' || isAmpMetaAmp(arg.amp) ) &&
+    // channels?: Thrl6pChannelMeta[]
+    ( typeof arg.channels === 'undefined' || (Array.isArray(arg.channels) && arg.channels.every((item: unknown) => isThrl6pChannelMeta(item))) ) &&
+
+  true
+  );
+  }
+
+export function isThrl6pChannelMeta(arg: any): arg is models.Thrl6pChannelMeta {
+  return (
+  arg != null &&
+  typeof arg === 'object' &&
+    // channel?: ChannelMetaChannel
+    ( typeof arg.channel === 'undefined' || isChannelMetaChannel(arg.channel) ) &&
+    // description?: string
+    ( typeof arg.description === 'undefined' || typeof arg.description === 'string' ) &&
+    // inspired_by?: string
+    ( typeof arg.inspired_by === 'undefined' || typeof arg.inspired_by === 'string' ) &&
+    // name?: string
+    ( typeof arg.name === 'undefined' || typeof arg.name === 'string' ) &&
+
+  true
+  );
+  }
+
 export function isThrl6pCreatePatchRequest(arg: any): arg is models.Thrl6pCreatePatchRequest {
   return (
   arg != null &&
@@ -22,6 +75,17 @@ export function isThrl6pCreatePatchRequest(arg: any): arg is models.Thrl6pCreate
     ( typeof arg.description === 'undefined' || typeof arg.description === 'string' ) &&
     // patch?: string
     ( typeof arg.patch === 'undefined' || typeof arg.patch === 'string' ) &&
+
+  true
+  );
+  }
+
+export function isThrl6pMeta(arg: any): arg is models.Thrl6pMeta {
+  return (
+  arg != null &&
+  typeof arg === 'object' &&
+    // amps?: Thrl6pAmpMeta[]
+    ( typeof arg.amps === 'undefined' || (Array.isArray(arg.amps) && arg.amps.every((item: unknown) => isThrl6pAmpMeta(item))) ) &&
 
   true
   );

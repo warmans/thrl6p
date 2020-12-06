@@ -8,6 +8,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	v1 "github.com/warmans/thrl6p/server/gen/api/v1"
 	"github.com/warmans/thrl6p/server/pkg/filter"
+	"github.com/warmans/thrl6p/server/pkg/metadata"
 	"github.com/warmans/thrl6p/server/pkg/patch"
 	"github.com/warmans/thrl6p/server/pkg/store"
 	"github.com/warmans/thrl6p/server/pkg/store/model"
@@ -33,7 +34,6 @@ func (b *PatchService) RegisterHTTP(ctx context.Context, router *mux.Router, mux
 }
 
 func (b *PatchService) CreatePatch(ctx context.Context, req *v1.CreatePatchRequest) (*v1.Patch, error) {
-
 	p := &patch.THRL6P{}
 	if err := json.Unmarshal([]byte(req.Patch), p); err != nil {
 		return nil, ErrInvalidRequestField("patch", err.Error()).Err()
@@ -47,7 +47,7 @@ func (b *PatchService) CreatePatch(ctx context.Context, req *v1.CreatePatchReque
 	if err := b.db.WithStore(func(s *store.Store) error {
 		return s.CreatePatch(rec)
 	}); err != nil {
-		return nil, ErrInternal().Err()
+		return nil, ErrInternal(err).Err()
 	}
 
 	//todo: permalink
@@ -95,8 +95,7 @@ func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNam
 	err := b.db.WithStore(func(s *store.Store) error {
 		yes, err := s.PatchNameExists(ctx, request.Name)
 		if err != nil {
-			//todo: log error?
-			return ErrInternal().Err()
+			return ErrInternal(err).Err()
 		}
 		if !yes {
 			return nil
@@ -107,4 +106,8 @@ func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNam
 		return nil, err
 	}
 	return &empty.Empty{}, nil
+}
+
+func (b *PatchService) Metadata(ctx context.Context, _ *empty.Empty) (*v1.Meta, error) {
+	return metadata.All().Proto(), nil
 }

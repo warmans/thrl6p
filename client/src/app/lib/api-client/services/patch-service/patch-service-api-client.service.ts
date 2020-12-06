@@ -92,6 +92,22 @@ export class PatchServiceAPIClient implements PatchServiceAPIClientInterface {
   }
 
   /**
+   * Metadata for the patch properties.
+   * Response generated for [ 200 ] HTTP response code.
+   */
+  metadata(
+    requestHttpOptions?: HttpOptions
+  ): Observable<models.Thrl6pMeta> {
+    const path = `/api/patch/metadata`;
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
+
+    return this.sendRequest<models.Thrl6pMeta>('GET', path, options);
+  }
+
+  /**
    * Validate a patch name.
    * Response generated for [ 200 ] HTTP response code.
    */

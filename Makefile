@@ -12,9 +12,17 @@ server.vendor:
 	cd server && \
 	go mod download && \
 	go mod vendor && \
+	cd .. && $(MAKE) server.vendor.proto
+
+.PHONY: server.vendor.proto
+server.vendor.proto:
+	# gomod can't be used to vendor non-go code, so to pull in the proto deps it needs to just copy them
+	# from the mod cache.
+	cd server && \
 	mkdir -p ./vendor/github.com/grpc-ecosystem/grpc-gateway && \
 	go list -f {{.Dir}} -m github.com/grpc-ecosystem/grpc-gateway | grep "github.com" && \
-	rsync -aq --no-perms --no-owner --no-group --chmod=ugo=rwX `go list -f {{.Dir}} -m github.com/grpc-ecosystem/grpc-gateway`/* ./vendor/github.com/grpc-ecosystem/grpc-gateway/.
+	rsync -aq --no-perms --no-owner --no-group --chmod=ugo=rwX `go list -f {{.Dir}} -m github.com/grpc-ecosystem/grpc-gateway`/* ./vendor/github.com/grpc-ecosystem/grpc-gateway/. && \
+	rsync -aq --no-perms --no-owner --no-group --chmod=ugo=rwX `go list -f {{.Dir}} -m github.com/mwitkow/go-proto-validators`/* ./vendor/github.com/mwitkow/go-proto-validators/.
 
 .PHONY: server.tools
 server.tools:
@@ -28,7 +36,7 @@ generate: generate.proto generate.code generate.api-client
 
 .PHONY: generate.proto
 generate.proto:
-	cd server && rm -rf gen/api && prototool generate proto
+	cd server && rm -rf gen_temp && prototool generate proto && rm -rf gen && mv gen_temp gen
 
 .PHONY: generate.code
 generate.code:

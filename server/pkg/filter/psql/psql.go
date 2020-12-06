@@ -29,7 +29,7 @@ func JSONCondition(f filter.Filter, field string, validPathSegments []string) (s
 type JsonQuery struct {
 	sql               io.Writer
 	params            []interface{}
-	validPathSegments []string
+	validPathSegments []string // this should be a schema instead of a list
 	jsonField         string
 }
 

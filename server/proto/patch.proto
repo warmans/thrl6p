@@ -7,6 +7,7 @@ option go_package = "api/v1";
 import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
 import "google/protobuf/empty.proto";
+import "validator.proto";
 
 service PatchService {
   rpc CreatePatch (CreatePatchRequest) returns (Patch) {
@@ -16,16 +17,6 @@ service PatchService {
     };
     option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
       description: "Uploads a new patch."
-    };
-  }
-
-  rpc ValidateName (ValidateNameRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      post: "/api/patch/validate/name",
-      body: "*"
-    };
-    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
-      description: "Validate a patch name."
     };
   }
 
@@ -46,11 +37,30 @@ service PatchService {
       description: "Lists patches."
     };
   }
+
+  rpc ValidateName (ValidateNameRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/patch/validate/name",
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Validate a patch name."
+    };
+  }
+
+  rpc Metadata(google.protobuf.Empty) returns (Meta) {
+    option (google.api.http) = {
+      get: "/api/patch/metadata"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      description: "Metadata for the patch properties."
+    };
+  }
 }
 
 message CreatePatchRequest {
-  string patch = 1;
-  string description = 2;
+  string patch = 1 [(validator.field) = {string_not_empty: true}];
+  string description = 2 [(validator.field) = {length_lt: 1024}];
 }
 
 message Patch {
@@ -62,11 +72,7 @@ message Patch {
 }
 
 message GetPatchRequest {
-  string id = 1;
-}
-
-message ValidateNameRequest {
-  string name = 1;
+  string id = 1 [(validator.field) = {string_not_empty: true}];
 }
 
 message ListPatchesRequest {
@@ -77,4 +83,41 @@ message ListPatchesRequest {
 
 message PatchList {
   repeated Patch patches = 1;
+}
+
+message ValidateNameRequest {
+  string name = 1 [(validator.field) = {string_not_empty: true}];
+}
+
+message Meta {
+  repeated AmpMeta amps = 1;
+}
+
+message AmpMeta {
+  enum Amp {
+    UNKNOWN_AMP_GROUP = 0;
+    CLASSIC = 1;
+    BOUTIQUE = 2;
+    MODERN = 3;
+  }
+  Amp amp = 1;
+  repeated ChannelMeta channels = 2;
+}
+
+message ChannelMeta {
+  enum Channel {
+    UNKNOWN_CHANNEL = 0;
+    CLEAN = 1;
+    CRUNCH = 2;
+    LEAD = 3;
+    HI_GAIN = 4;
+    SPECIAL = 5;
+    BASS = 6;
+    ACOUSTIC = 7;
+    FLAT = 8;
+  }
+  Channel channel = 1;
+  string name = 2;
+  string inspired_by = 3;
+  string description = 4;
 }

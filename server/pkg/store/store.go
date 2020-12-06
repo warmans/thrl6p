@@ -169,7 +169,7 @@ func (s *Store) ListPatches(ctx context.Context, f filter.Filter, pageSize int32
 
 func (s *Store) PatchNameExists(ctx context.Context, name string) (bool, error) {
 	count := 0
-	if err := s.tx.QueryRowxContext(ctx, `SELECT COUNT(*) FROM "patch" WHERE name = ?`, name).Scan(&count); err != nil {
+	if err := s.tx.QueryRowxContext(ctx, `SELECT COUNT(*) FROM "patch" WHERE name = $1`, name).Scan(&count); err != nil {
 		return false, err
 	}
 	return count > 0, nil

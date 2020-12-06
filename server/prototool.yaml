@@ -2,6 +2,7 @@ excludes:
   - bin
   - pkg
   - gen
+  - gen_temp
   - cmd
 
 protoc:
@@ -9,6 +10,7 @@ protoc:
   includes:
     - vendor/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis
     - vendor/github.com/grpc-ecosystem/grpc-gateway
+    - vendor/github.com/mwitkow/go-proto-validators
   allow_unused_imports: false
 
 lint:
@@ -31,12 +33,15 @@ generate:
     - name: go
       type: go
       flags: plugins=grpc
-      output: gen
+      output: gen_temp
     - name: grpc-gateway
       type: go
       flags: logtostderr=true
-      output: gen
+      output: gen_temp
     - name: swagger
       type: go
       flags: logtostderr=true
-      output: gen
+      output: gen_temp
+    - name: govalidators
+      type: go
+      output: gen_temp

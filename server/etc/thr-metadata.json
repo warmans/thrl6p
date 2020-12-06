@@ -1,0 +1,163 @@
+{
+  "amps": [
+    {
+      "amp": "classic",
+      "channels": [
+        {
+          "channel": "clean",
+          "name": "THR10C_Deluxe",
+          "inspired_by": "Fender Deluxe",
+          "description": "A low-gain preamp for sparkling American-style cleans, with 6L6 tubes in the output stage for brightness and a strong midrange."
+        },
+        {
+          "channel": "crunch",
+          "name": "THR10_DC30",
+          "inspired_by": "DC30 (Modded)",
+          "description": "EL84 power tubes in a true Class-A configuration with a highly responsive EQ for rich, complex harmonic tones and warm overdrive. Inspired by British chime."
+        },
+        {
+          "channel": "lead",
+          "name": "THR10_DC30",
+          "inspired_by": "DC30 (Modded)",
+          "description": "EL84 power tubes in a true Class-A configuration with a highly responsive EQ for rich, complex harmonic tones and warm overdrive. Inspired by British chime."
+        },
+        {
+          "channel": "hi_gain",
+          "name": "THR10_Modern",
+          "inspired_by": "Mesa Dual Rectifier",
+          "description": "Powerful modern distortion that fills out as the high-gain preamp is pushed. Tread carefully after 12 o'clock."
+        },
+        {
+          "channel": "special",
+          "name": "THR10X_Brown1",
+          "inspired_by": "EVH 5153 Channel 2 (modded)",
+          "description": "12AX7 and 6L6 tubes in pursuit of the \"Brown\" sound. Set the gain around 11 o'clock for classic rock crunch, or crank it for saturated rhythm tones."
+        },
+        {
+          "channel": "bass",
+          "name": "THR10_Bass_Eden_Marcus",
+          "inspired_by": "Eden / Little Marcus",
+          "description": "Woody, vintage tone with late breakup."
+        },
+        {
+          "channel": "acoustic",
+          "name": "THR10_Aco_Condenser1",
+          "inspired_by": "Condenser Mic",
+          "description": "Designed for acoustic-electric guitar, modeling the response of a boutique condenser microphone."
+        },
+        {
+          "channel": "flat",
+          "name": "THR10_Flat",
+          "inspired_by": "NA",
+          "description": "NA"
+        }
+      ]
+    },
+    {
+      "amp": "boutique",
+      "channels": [
+        {
+          "channel": "clean",
+          "name": "THR10C_BJunior2",
+          "inspired_by": "Fender Blues Jr (Modded)",
+          "description": "A low-watt EL34 design. Turning up the preamp gain will thicken up the cleans, then push into bluesy overdrive."
+        },
+        {
+          "channel": "crunch",
+          "name": "THR10C_Mini",
+          "inspired_by": "DRZ Mini (modded)",
+          "description": "A deceptively simple amp circuit with just a single 12AX7 and EL84. A full, no-frills tone that is highly responsive to picking dynamics."
+        },
+        {
+          "channel": "lead",
+          "name": "THR30_Blondie",
+          "inspired_by": "Marshall 1987X 50W Plexi (Modded)",
+          "description": "A version of the Classic/Lead circuit, modified for extra gain with a darker tone and scooped mids."
+        },
+        {
+          "channel": "hi_gain",
+          "name": "THR30_FLead",
+          "inspired_by": "Various",
+          "description": "ECC83s into 6L6s for high gain with a highly responsive EQ, inspired by German engineering."
+        },
+        {
+          "channel": "special",
+          "name": "THR10X_South",
+          "inspired_by": "KRANK Krankenstein (Modded)",
+          "description": "Four 12AX7 preamp tubes into 6L6 output tubes. Tight, fast tracking for crushing highgain. "
+        },
+        {
+          "channel": "bass",
+          "name": "THR10_Bass_Mesa",
+          "inspired_by": "Mesa",
+          "description": "Full, modern tone that breaks into a fuzz-like overdrive when pushed hard."
+        },
+        {
+          "channel": "acoustic",
+          "name": "THR10_Aco_Tube1",
+          "inspired_by": "Tube Mic",
+          "description": "Designed for acoustic-electric guitar, modeling the response of a boutique tube microphone."
+        },
+        {
+          "channel": "flat",
+          "name": "THR10_Flat",
+          "inspired_by": "NA",
+          "description": "NA"
+        }
+      ]
+    },
+    {
+      "amp": "modern",
+      "channels": [
+        {
+          "channel": "clean",
+          "name": "THR30_Carmen",
+          "inspired_by": "Carmen Ghia",
+          "description": "A boutique, low-watt EL84 design that adds fullness and sustain as the master volume is turned up. A great match for neck pickups."
+        },
+        {
+          "channel": "crunch",
+          "name": "THR30_SR101",
+          "inspired_by": "AC30 and DC30",
+          "description": "A mid-volume boutique design with 6550 power tubes. Listen for tight bass response and a singing sustain."
+        },
+        {
+          "channel": "lead",
+          "name": "THR10_Brit",
+          "inspired_by": "Hot rodded JCM800",
+          "description": "A high-gain design with 12AX7s into EL34s, for the tone that defined 1980s hard rock and heavy metal."
+        },
+        {
+          "channel": "hi_gain",
+          "name": "THR10X_Brown2",
+          "inspired_by": "EVH 5153 Channel 3 (modded)",
+          "description": "A boosted version of the Classic/Special amp, with even more gain for aggressive rhythms or searing leads."
+        },
+        {
+          "channel": "special",
+          "name": "THR30_Stealth",
+          "inspired_by": "Booster circuit + EVH Stealth channel 3 mod",
+          "description": "A classic overdrive circuit before the preamp tightens low-frequency response and provides even more gain. Ideal for extended-range guitars."
+        },
+        {
+          "channel": "bass",
+          "name": "THR30_JKBass2",
+          "inspired_by": "JK's original based on Marshall circuits",
+          "description": "Vintage voicing with early breakup for overdrive that works well with bass or guitar."
+        },
+        {
+          "channel": "acoustic",
+          "name": "THR10_Aco_Dynamic1",
+          "inspired_by": "Dynamic Mic",
+          "description": "Designed for acoustic-electric guitar, modeling the response of a boutique dynamic microphone."
+        },
+        {
+          "channel": "flat",
+          "name": "THR10_Flat",
+          "inspired_by": "NA",
+          "description": "NA"
+        }
+      ]
+    }
+  ]
+}
