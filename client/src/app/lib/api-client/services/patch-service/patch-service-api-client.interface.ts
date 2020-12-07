@@ -47,7 +47,7 @@ export interface PatchServiceAPIClientInterface {
       body: models.Thrl6pValidateNameRequest,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<object>;
+  ): Observable<models.Thrl6pNameValidation>;
 
   /**
    * Gets a patch with associated metadata.

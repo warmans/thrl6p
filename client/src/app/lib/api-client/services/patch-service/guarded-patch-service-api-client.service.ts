@@ -56,9 +56,9 @@ export class GuardedPatchServiceAPIClient extends PatchServiceAPIClient {
       body: models.Thrl6pValidateNameRequest,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<object> {
+  ): Observable<models.Thrl6pNameValidation> {
     return super.validateName(args, requestHttpOptions)
-      .pipe(tap((res: any) => typeof res === 'object' || console.error(`TypeGuard for response 'object' caught inconsistency.`, res)));
+      .pipe(tap((res: any) => guards.isThrl6pNameValidation(res) || console.error(`TypeGuard for response 'Thrl6pNameValidation' caught inconsistency.`, res)));
   }
 
   getPatch(

@@ -1,6 +1,7 @@
 CREATE TABLE "patch" (
     id TEXT PRIMARY KEY,
-    name TEXT UNIQUE,
+    fingerprint TEXT UNIQUE,
+    name TEXT,
     description TEXT,
     data JSONB,
     created_at TIMESTAMP

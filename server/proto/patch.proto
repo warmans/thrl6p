@@ -38,7 +38,7 @@ service PatchService {
     };
   }
 
-  rpc ValidateName (ValidateNameRequest) returns (google.protobuf.Empty) {
+  rpc ValidateName (ValidateNameRequest) returns (NameValidation) {
     option (google.api.http) = {
       post: "/api/patch/validate/name",
       body: "*"
@@ -65,10 +65,11 @@ message CreatePatchRequest {
 
 message Patch {
   string id = 1;
-  string patch = 2;
-  string name = 3;
-  string description = 4;
-  string permalink = 5;
+  string fingerprint = 2;
+  string patch = 3;
+  string name = 4;
+  string description = 5;
+  string permalink = 6;
 }
 
 message GetPatchRequest {
@@ -87,6 +88,11 @@ message PatchList {
 
 message ValidateNameRequest {
   string name = 1 [(validator.field) = {string_not_empty: true}];
+}
+
+message NameValidation {
+  bool ok = 1;
+  string reason = 2;
 }
 
 message Meta {

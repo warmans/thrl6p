@@ -66,3 +66,7 @@ server.run:
 .PHONY: env.run
 env.run:
 	cd dev; POSTGRES_USER=$(DEV_DB_USER) POSTGRES_PASSWORD=$(DEV_DB_PASS) docker-compose up
+
+.PHONY: env.clean
+env.clean:
+	cd dev; docker-compose down -v

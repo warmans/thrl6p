@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ThrFile } from '../../component/file-loader/file-loader.component';
 import { THRL6P } from '../../../../lib/thrl6p/thrl6p';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -11,7 +11,7 @@ import { Thrl6pPatch } from '../../../../lib/api-client/models';
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
-export class UploadComponent implements OnInit {
+export class UploadComponent implements OnInit, OnDestroy {
 
   /**
    * Raw patch file
@@ -32,6 +32,9 @@ export class UploadComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
   }
 
   f(field: string) {
@@ -57,7 +60,6 @@ export class UploadComponent implements OnInit {
           }
         }
       ).subscribe((res: Thrl6pPatch) => {
-        console.log(res);
         this.router.navigateByUrl(`patch/${res.id}`);
       },
     );
@@ -71,14 +73,18 @@ export class UploadComponent implements OnInit {
 
   nameChanged() {
     const nameValue = this.f('name').value;
+    if (nameValue === '') {
+      return;
+    }
     this.apiClient.validateName({ body: { name: nameValue } }).subscribe((resp) => {
+      if (resp.ok) {
         this.patch.data.meta.name = nameValue;
-      },
-      (err) => {
-        this.f('name').setErrors({
-          ...this.f('name').errors,
-          nameNotAvailableReason: err.error.details[0].description
-        });
+        return;
+      }
+      this.f('name').setErrors({
+        ...this.f('name').errors,
+        apiErrors: [resp.reason],
       });
+    });
   }
 }

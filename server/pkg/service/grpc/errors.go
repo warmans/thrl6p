@@ -9,9 +9,10 @@ import (
 
 func ErrInvalidRequestField(field string, reason string) *status.Status {
 	s, err := status.New(codes.InvalidArgument, http.StatusText(http.StatusBadRequest)).WithDetails(
-		&errdetails.BadRequest_FieldViolation{
-			Field:       field,
-			Description: reason,
+		&errdetails.BadRequest{
+			FieldViolations: []*errdetails.BadRequest_FieldViolation{
+				{Field: field, Description: reason},
+			},
 		},
 	)
 	if err != nil {
@@ -23,6 +24,10 @@ func ErrInvalidRequestField(field string, reason string) *status.Status {
 func ErrInternal(err error) *status.Status {
 	if err == nil {
 		return status.New(codes.Internal, http.StatusText(http.StatusInternalServerError))
+	}
+	// do not wrap existing grpc errors
+	if sta, ok := status.FromError(err); ok {
+		return sta
 	}
 	s, err := status.New(codes.Internal, http.StatusText(http.StatusInternalServerError)).WithDetails(
 		&errdetails.DebugInfo{

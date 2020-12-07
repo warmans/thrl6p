@@ -116,14 +116,14 @@ export class PatchServiceAPIClient implements PatchServiceAPIClientInterface {
       body: models.Thrl6pValidateNameRequest,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<object> {
+  ): Observable<models.Thrl6pNameValidation> {
     const path = `/api/patch/validate/name`;
     const options: APIHttpOptions = {
       ...this.options,
       ...requestHttpOptions,
     };
 
-    return this.sendRequest<object>('POST', path, options, JSON.stringify(args.body));
+    return this.sendRequest<models.Thrl6pNameValidation>('POST', path, options, JSON.stringify(args.body));
   }
 
   /**

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
 	"go.uber.org/zap"
@@ -29,13 +30,15 @@ func LogMessageProducer() grpc_zap.MessageProducer {
 			case *errdetails.ErrorInfo:
 				fields = append(fields, zap.String("err.error.reason", t.Reason))
 			case *errdetails.BadRequest:
-				for _, violation := range t.GetFieldViolations() {
-					fields = append(fields, zap.String("err.request.field", violation.GetField()))
-					fields = append(fields, zap.String("err.request.violation", violation.GetDescription()))
+				for k, violation := range t.GetFieldViolations() {
+					fields = append(fields, zap.String(fmt.Sprintf("err.request.field[%d]", k), violation.GetField()))
+					fields = append(fields, zap.String(fmt.Sprintf("err.request.violation[%d]", k), violation.GetDescription()))
 				}
+			case *errdetails.BadRequest_FieldViolation:
+				fields = append(fields, zap.String("err.request.field", t.GetField()))
+				fields = append(fields, zap.String("err.request.violation", t.GetDescription()))
 			}
 		}
-
 		ctxzap.Extract(ctx).Check(level, msg).Write(
 			fields...
 		)

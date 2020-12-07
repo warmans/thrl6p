@@ -91,12 +91,27 @@ export function isThrl6pMeta(arg: any): arg is models.Thrl6pMeta {
   );
   }
 
+export function isThrl6pNameValidation(arg: any): arg is models.Thrl6pNameValidation {
+  return (
+  arg != null &&
+  typeof arg === 'object' &&
+    // ok?: boolean
+    ( typeof arg.ok === 'undefined' || typeof arg.ok === 'boolean' ) &&
+    // reason?: string
+    ( typeof arg.reason === 'undefined' || typeof arg.reason === 'string' ) &&
+
+  true
+  );
+  }
+
 export function isThrl6pPatch(arg: any): arg is models.Thrl6pPatch {
   return (
   arg != null &&
   typeof arg === 'object' &&
     // description?: string
     ( typeof arg.description === 'undefined' || typeof arg.description === 'string' ) &&
+    // fingerprint?: string
+    ( typeof arg.fingerprint === 'undefined' || typeof arg.fingerprint === 'string' ) &&
     // id?: string
     ( typeof arg.id === 'undefined' || typeof arg.id === 'string' ) &&
     // name?: string

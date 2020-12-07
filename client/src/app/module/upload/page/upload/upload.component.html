@@ -1,4 +1,7 @@
 <div class="container pt-4">
+
+  <app-alert></app-alert>
+
   <ng-container *ngIf="file === null">
     <div class="row">
       <div class="col d-flex justify-content-center">
@@ -30,24 +33,14 @@
                           (change)="nameChanged()"/>
                   <div class="input-group-append">
                     <div
-                        class="input-group-text"
-                        [ngClass]="{'text-danger': f('name')?.errors?.nameNotAvailableReason, 'text-success': !f('name')?.errors?.nameNotAvailableReason}"
-                        title="The name must be unique">
-                      Available
+                            class="input-group-text"
+                            [ngClass]="{'text-danger': f('name')?.errors?.apiErrors?.length > 0, 'text-success': !f('name')?.errors?.apiErrors?.length}"
+                            title="The must be unique">
+                      {{ f('name') .errors?.apiErrors?.length > 0 ? 'Not Allowed' : 'OK' }}
                     </div>
                   </div>
                 </div>
-                <div *ngIf="f('name').invalid" class="text-danger mt-1 p-1">
-                  <div *ngIf="f('name').errors.required">
-                    Name is required.
-                  </div>
-                  <div *ngIf="f('name').errors.maxlength">
-                    Name is too long (max length is {{ f('name').errors.maxlength.requiredLength }} characters).
-                  </div>
-                  <div *ngIf="f('name').errors.nameNotAvailableReason">
-                    {{ f('name').errors.nameNotAvailableReason }}.
-                  </div>
-                </div>
+                <app-form-errors [form]="metadataForm" [fieldName]="'name'"></app-form-errors>
               </div>
               <div class="form-group">
                 <label for="description">Description</label>
@@ -57,7 +50,8 @@
               </div>
               <div class="text-right">
                 <button class="btn btn-sm btn-secondary mr-2" (click)="cancel()">Discard</button>
-                <button class="btn btn-sm btn-primary" type="submit" [disabled]="f('name').invalid">Confirm</button>
+                <button class="btn btn-sm btn-primary" type="submit" [disabled]="metadataForm.invalid">Complete Upload
+                </button>
               </div>
             </div>
           </div>

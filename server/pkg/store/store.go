@@ -4,6 +4,7 @@ package store
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/teris-io/shortid"
@@ -125,7 +126,7 @@ func (s *Store) CreatePatch(patch *model.Patch) error {
 	patch.Id = shortid.MustGenerate()
 	patch.CreatedAt = util.TimeP(time.Now())
 	_, err := s.tx.NamedExec(
-		`INSERT INTO "patch" (id, name, description, data, created_at) VALUES (:id, :name, :description, :data, :created_at)`,
+		`INSERT INTO "patch" (id, fingerprint, name, description, data, created_at) VALUES (:id, :fingerprint, :name, :description, :data, :created_at)`,
 		patch,
 	)
 	return err
@@ -141,7 +142,7 @@ func (s *Store) ListPatches(ctx context.Context, f filter.Filter, pageSize int32
 	where, params, err := psql.JSONCondition(
 		f,
 		"data",
-		[]string{"data", "tone", "THRGroupAmp", "THRGroupCab", "THRGroupGate", "THRGroupFX2Effect", "THRGroupFX1Compressor", "THRGroupFX3EffectEcho", "THRGroupFX4EffectReverb", "@asset",  "Mid", "Bass", "Drive", "Master", "Treble"},
+		[]string{"data", "tone", "THRGroupAmp", "THRGroupCab", "THRGroupGate", "THRGroupFX2Effect", "THRGroupFX1Compressor", "THRGroupFX3EffectEcho", "THRGroupFX4EffectReverb", "@asset", "Mid", "Bass", "Drive", "Master", "Treble"},
 	)
 	if err != nil {
 		return nil, err
@@ -167,12 +168,24 @@ func (s *Store) ListPatches(ctx context.Context, f filter.Filter, pageSize int32
 	return result, nil
 }
 
-func (s *Store) PatchNameExists(ctx context.Context, name string) (bool, error) {
-	count := 0
-	if err := s.tx.QueryRowxContext(ctx, `SELECT COUNT(*) FROM "patch" WHERE name = $1`, name).Scan(&count); err != nil {
-		return false, err
+func (s *Store) PatchNameExists(ctx context.Context, name string) (bool, string, error) {
+	var id string
+	if err := s.tx.QueryRowxContext(ctx, `SELECT id FROM "patch" WHERE name = $1 LIMIT 1`, name).Scan(&id); err != nil {
+		if err != sql.ErrNoRows {
+			return false, "", err
+		}
 	}
-	return count > 0, nil
+	return id != "", id, nil
+}
+
+func (s *Store) PatchExists(ctx context.Context, fingerprint string) (bool, string, error) {
+	var id string
+	if err := s.tx.QueryRowxContext(ctx, `SELECT id FROM "patch" WHERE fingerprint = $1 LIMIT 1`, fingerprint).Scan(&id); err != nil {
+		if err != sql.ErrNoRows {
+			return false, "", err
+		}
+	}
+	return id != "", id, nil
 }
 
 func limitStmnt(pageSize int32, page int32) string {

@@ -118,7 +118,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "properties": {}
+              "$ref": "#/definitions/thrl6pNameValidation"
             }
           },
           "default": {
@@ -290,10 +290,24 @@
         }
       }
     },
+    "thrl6pNameValidation": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
     "thrl6pPatch": {
       "type": "object",
       "properties": {
         "id": {
+          "type": "string"
+        },
+        "fingerprint": {
           "type": "string"
         },
         "patch": {

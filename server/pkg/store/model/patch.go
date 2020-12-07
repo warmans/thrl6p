@@ -7,6 +7,7 @@ import (
 
 type Patch struct {
 	Id          string     `db:"id"`
+	Fingerprint string     `db:"fingerprint"`
 	Name        string     `db:"name"`
 	Description string     `db:"description"`
 	Patch       string     `db:"data"`
@@ -16,6 +17,7 @@ type Patch struct {
 func (p *Patch) Proto(permaLink string) *v1.Patch {
 	return &v1.Patch{
 		Id:          p.Id,
+		Fingerprint: p.Fingerprint,
 		Patch:       p.Patch,
 		Name:        p.Name,
 		Description: p.Description,

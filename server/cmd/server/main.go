@@ -56,7 +56,8 @@ func main() {
 }
 
 func newLogger() *zap.Logger {
-	logger, err := zap.NewProduction()
+	// the stack traces are mostly useless because they're usually the trace of the log call.
+	logger, err := zap.NewProduction(zap.AddStacktrace(zap.PanicLevel))
 	if err != nil {
 		panic(err)
 	}

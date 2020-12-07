@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	empty "github.com/golang/protobuf/ptypes/empty"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -38,13 +39,25 @@ func (b *PatchService) CreatePatch(ctx context.Context, req *v1.CreatePatchReque
 	if err := json.Unmarshal([]byte(req.Patch), p); err != nil {
 		return nil, ErrInvalidRequestField("patch", err.Error()).Err()
 	}
+	fp, err := patch.Fingerprint(*p)
+	if err != nil {
+		return nil, ErrInternal(err).Err()
+	}
 
 	rec := &model.Patch{
 		Name:        p.Data.Meta.Name,
+		Fingerprint: fp,
 		Description: req.Description,
 		Patch:       req.Patch,
 	}
 	if err := b.db.WithStore(func(s *store.Store) error {
+		exists, id, err := s.PatchExists(ctx, rec.Fingerprint)
+		if err != nil {
+			return err
+		}
+		if exists {
+			return ErrInvalidRequestField("patch", "Identical patch already exists: "+id).Err()
+		}
 		return s.CreatePatch(rec)
 	}); err != nil {
 		return nil, ErrInternal(err).Err()
@@ -91,21 +104,24 @@ func (b *PatchService) ListPatch(ctx context.Context, request *v1.ListPatchesReq
 	return proto, nil
 }
 
-func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNameRequest) (*empty.Empty, error) {
+func (b *PatchService) ValidateName(ctx context.Context, request *v1.ValidateNameRequest) (*v1.NameValidation, error) {
+	var exists bool
+	var id string
 	err := b.db.WithStore(func(s *store.Store) error {
-		yes, err := s.PatchNameExists(ctx, request.Name)
+		var err error
+		exists, id, err = s.PatchNameExists(ctx, request.Name)
 		if err != nil {
 			return ErrInternal(err).Err()
 		}
-		if !yes {
-			return nil
-		}
-		return ErrInvalidRequestField("name", "Name is not unique").Err()
+		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &empty.Empty{}, nil
+	if exists {
+		return &v1.NameValidation{Ok: false, Reason: fmt.Sprintf("Name is not unique (duplicates %s)", id)}, nil
+	}
+	return &v1.NameValidation{Ok: true}, nil
 }
 
 func (b *PatchService) Metadata(ctx context.Context, _ *empty.Empty) (*v1.Meta, error) {
